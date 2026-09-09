@@ -2,27 +2,48 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pydantic import ValidationError
 from schema import SignupData
-import string
-from rich import print
-# import asyncio
 from db.database import initiate_db, check_user, register_user
-
+import bcrypt
+from rich import print
+import string
 
 app = Flask(__name__)
 CORS(app, origins="http://localhost:8080")
 
+def password_hash(password: str):
+    password_bytes = password.encode('utf-8')
+
+    salt = bcrypt.gensalt()
+    hashed_psswd = bcrypt.hashpw(password_bytes, salt)
+    return hashed_psswd
+
 async def Signup(user):
-    username = user.username
-    email = user.email
-    password = user.password
+    username: str = user.username.lower()
+    email: str= user.email
+    password: str= user.password
 
     print(username, email, password)
-    # conn = await initiate_db()
-    # await register_user(conn, username, email, password)
+
+    conn = None
+    try:     
+        conn = await initiate_db()
+        users = await check_user(conn, username, email)
+        if users is None:
+            await register_user(conn, username, email, password)
+        else:
+            print('User already exist.')
+
+    except ValueError:
+        print("Sign up failed")
+
+    finally:
+        if conn is not None:
+            await conn.close()
+
 
 @app.post('/signup')
 async def fetch_user_data():
-    user = await request.json
+    user = request.get_json(silent=True)
     try:
         user = SignupData.model_validate(user)
     except ValidationError as error:
