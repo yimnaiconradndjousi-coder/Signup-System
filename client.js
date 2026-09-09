@@ -5,7 +5,6 @@ let user = {
     password:"admin123"
 }
 
-
 async function postData(url, data) {
     try {
         const response = await fetch(url, {
@@ -18,15 +17,17 @@ async function postData(url, data) {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message);
+            throw new Error(
+                `Status ${response.status}, ${error.message}`
+            );
         }
 
         const result = await response.json();
-        console.log("Saved:", result);
+        console.log("Saved:", result.message);
     } catch(error) {
         console.error("Signup failed:", error.message);
     }
 
 }
 
-postData(serverURL, user)
+postData(serverURL, user);
