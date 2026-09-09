@@ -10,7 +10,7 @@ async def initiate_db():
         id TEXT PRIMARY KEY NOT NULL,
         username TEXT NOT NULL UNIQUE,
         email TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL,
+        password_hash  NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )""")
     return conn
@@ -37,7 +37,7 @@ async def register_user(conn, username: str, email: str, psswd: str) -> None:
 
     try:  
         query = await cur.execute("""
-        INSERT INTO users(id, username, email, password) VALUES (?, ?, ?, ?);
+        INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
         """, (id , username, email, psswd))
         await conn.commit()
         print("User Register successfully")

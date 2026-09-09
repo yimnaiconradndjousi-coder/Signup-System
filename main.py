@@ -10,17 +10,18 @@ import string
 app = Flask(__name__)
 CORS(app, origins="http://localhost:8080")
 
-def password_hash(password: str):
+def password_hash(password: str) -> str:
     password_bytes = password.encode('utf-8')
 
     salt = bcrypt.gensalt()
     hashed_psswd = bcrypt.hashpw(password_bytes, salt)
-    return hashed_psswd
+    hashed_psswd_string = hashed_psswd.decode("utf-8")
+    return hashed_psswd_string
 
 async def Signup(user):
     username: str = user.username.lower()
     email: str= user.email
-    password: str= user.password
+    password: str= password_hash(user.password)
 
     print(username, email, password)
 
