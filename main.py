@@ -4,6 +4,8 @@ from pydantic import ValidationError
 import string
 from schema import SignupData
 
+from rich import print
+
 app = Flask(__name__)
 CORS(app, origins="http://localhost:8080")
 
@@ -15,15 +17,19 @@ def validate_user_data(user):
 @app.post('/signup')
 def get_user_data():
     try:
-        user = SignupData.model_validate(request.json())
+        user = SignupData.model_validate(request.json)
     except ValidationError as error:
         return jsonify({
             "message": "Invalid data",
             "errors": error.errors()
         }), 400
 
+
     username = user.username
-    
+    email = user.email
+    psswd = user.password
+    print(username, email, psswd)
+
     if any(char in string.punctuation for char in username):
         return jsonify({
             "message": "Invalid username",
