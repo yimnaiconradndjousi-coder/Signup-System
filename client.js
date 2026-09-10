@@ -1,6 +1,6 @@
 const serverURL = "http://localhost:8080/signup"
 let user = {
-    username:"YImnai",
+    username:"YImnai Conrad",
     email:"conradnyc@zohomail.com",
     password:"admin123"
 }

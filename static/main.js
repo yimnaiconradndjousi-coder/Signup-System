@@ -10,7 +10,6 @@ const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
 
 // Hide or Show logic
-
 showOrHidePassword.addEventListener('click', function(e) {   
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -20,6 +19,8 @@ showOrHidePassword.addEventListener('click', function(e) {
         showOrHidePassword.src = '../src/show-password.png';
     }
 });
+
+const isPasswordValid = (userName == '') ? true : false
 
 function errorDisplay(btn) {
     btn.addEventListener('click', function(e) {
