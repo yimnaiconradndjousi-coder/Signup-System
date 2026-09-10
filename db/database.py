@@ -1,8 +1,8 @@
 import aiosqlite as db
 import uuid
-from datetime import datetime
+from aiosqlite import Connection as conn
 
-async def initiate_db():
+async def initiate_db() -> conn:
     conn = await db.connect('./db/userDB.db')
     await conn.execute("PRAGMA journal_mode=WAL;")
     await conn.execute("""
@@ -15,11 +15,10 @@ async def initiate_db():
         )""")
     return conn
 
-async def check_user(conn: db.Connection, username: str, email: str) -> list:
+async def check_user(conn: conn, username: str, email: str):
     cur = await conn.cursor()
-    query = None
     try:
-        query = await cur.execute(
+        await cur.execute(
             """
             SELECT username, email
             FROM users
@@ -28,16 +27,15 @@ async def check_user(conn: db.Connection, username: str, email: str) -> list:
     except LookupError:
         print("failed to check user")
 
-    query_result = await query.fetchone()
+    query_result = await cur.fetchone()
     return query_result
 
-async def register_user(conn: db.Connection, username: str, email: str, psswd: str) -> None:
+async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
     cur = await conn.cursor()
     id = str(uuid.uuid1())
-
     try:  
-        query = await cur.execute("""
-        INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
+        await cur.execute("""
+            INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
         """, (id , username, email, psswd))
         await conn.commit()
         print("User Register successfully")

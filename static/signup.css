@@ -167,7 +167,7 @@ input:-webkit-autofill:active {
     margin-bottom: 25px; 
 }
 
-#login-btn, #signup-btn {
+#signup-btn {
     margin-top: 8%;
     text-align: center;
     padding: 5%;
@@ -183,7 +183,7 @@ input:-webkit-autofill:active {
 
 #signup-btn {
     font-size: 1em;
-    margin: 2%;
+    margin: 3%;
 }
 
 .login-btn:hover {
