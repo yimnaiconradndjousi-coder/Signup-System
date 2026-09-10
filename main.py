@@ -17,15 +17,14 @@ CORS(app, origins=[
 
 def password_hash(password: str) -> str:
     password_bytes = password.encode('utf-8')
-
     salt = bcrypt.gensalt()
     hashed_psswd = bcrypt.hashpw(password_bytes, salt)
-    hashed_psswd_string = hashed_psswd.decode("utf-8")
-    return hashed_psswd_string
+    hashed_psswd_str = hashed_psswd.decode("utf-8")
+    return hashed_psswd_str
 
 async def Signup(user):
     username: str = user.username.lower()
-    email: str= user.email
+    email: str= user.email.lower()
     password: str= password_hash(user.password)
     conn = None
     try:     

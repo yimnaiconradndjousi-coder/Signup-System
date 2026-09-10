@@ -11,7 +11,6 @@ const signupBtn = document.getElementById('signup-btn');
 
 const serverURL = "http://localhost:8080/signup"
 
-// Hide or Show logic
 showOrHidePassword.addEventListener('click', function(e) {   
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -60,10 +59,10 @@ signupBtn.addEventListener('click', function(e) {
     const password = passwordInput.value;
     const email = emailIput.value.trim();
 
-    const isUsernameValid = (userName == '') ? true : false;
-    const isEmailValid = (email == '') ? true: false;
-    const isPasswordValid = (password.length < 3) ? true : false;
-
+    let isUsernameValid = (userName == '') ? true : false;
+    let isEmailValid = (email == '') ? true: false;
+    let isPasswordValid = (password.length < 3) ? true : false;
+    
     if (password.length < 3) {
         passwordError.textContent = 'Password must be at least 8 characters.';
         insertErrorMessage(passwordError, hr);
@@ -86,7 +85,7 @@ signupBtn.addEventListener('click', function(e) {
 
     if (email == '') {
         if (emailError) {
-            emailError.textContent = 'Please enter your username.';
+            emailError.textContent = 'Please enter your email.';
             insertErrorMessage(emailError, hr);
 
             setTimeout( () => {
@@ -95,7 +94,7 @@ signupBtn.addEventListener('click', function(e) {
         }
     }
 
-    if (isUsernameValid && isEmailValid && isPasswordValid === false) {
+    if (!isUsernameValid && !isEmailValid && !isPasswordValid) {
         const user = {
             username: userName,
             email: email,
