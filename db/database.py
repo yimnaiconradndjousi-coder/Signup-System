@@ -15,7 +15,7 @@ async def initiate_db():
         )""")
     return conn
 
-async def check_user(conn, username: str, email: str) -> list:
+async def check_user(conn: db.Connection, username: str, email: str) -> list:
     cur = await conn.cursor()
     query = None
     try:
@@ -31,7 +31,7 @@ async def check_user(conn, username: str, email: str) -> list:
     query_result = await query.fetchone()
     return query_result
 
-async def register_user(conn, username: str, email: str, psswd: str) -> None:
+async def register_user(conn: db.Connection, username: str, email: str, psswd: str) -> None:
     cur = await conn.cursor()
     id = str(uuid.uuid1())
 
