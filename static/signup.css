@@ -80,9 +80,9 @@ body {
     width: 30%;
     height: 50%;
     min-width: 350px;
-    min-height: 650px;
+    min-height: 660px;
     max-width: 500px;
-    max-height: 900px;
+    max-height: 950px;
     border-radius: 10px;
     padding:0 10px 0 10px;
     margin: auto;
@@ -108,7 +108,7 @@ form {
     justify-content: center;
     margin: 0;
     padding: 0;
-    margin: 4% 0 8% 0 ;
+    margin: 3% 0 4% 0 ;
 }
 
 label {
@@ -183,7 +183,7 @@ input:-webkit-autofill:active {
 
 #signup-btn {
     font-size: 1em;
-    margin-top: 5px;
+    margin: 2%;
 }
 
 .login-btn:hover {
@@ -199,7 +199,7 @@ input:-webkit-autofill:active {
 .sign-up {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .signup-option, .login-option {
