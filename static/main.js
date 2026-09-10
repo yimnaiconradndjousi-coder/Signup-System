@@ -1,5 +1,3 @@
-const loginForm = document.querySelector(".login-form");
-const loginBtn = document.getElementById('login-btn');
 const showOrHidePassword = document.getElementById('show-or-hide-password');
 const userNameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
@@ -8,10 +6,8 @@ const passwordError = document.getElementById('password-error');
 const usernameError = document.getElementById('username-error');
 const emailError = document.getElementById('email-error');
 const hr = document.querySelector('.hr');
-const date = new Date();
 const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
-const userList = JSON.parse(localStorage.getItem('Users')) || [];
 
 // Hide or Show logic
 

@@ -22,13 +22,11 @@ async def Signup(user):
     username: str = user.username.lower()
     email: str= user.email
     password: str= password_hash(user.password)
-
-    print(username, email, password)
-
     conn = None
     try:     
         conn = await initiate_db()
         users = await check_user(conn, username, email)
+        print(users)
         if users is None:
             await register_user(conn, username, email, password)
         else:
