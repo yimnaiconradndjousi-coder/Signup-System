@@ -9,6 +9,8 @@ const hr = document.querySelector('.hr');
 const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
 
+const serverURL = "http://localhost:8080/signup"
+
 // Hide or Show logic
 showOrHidePassword.addEventListener('click', function(e) {   
     if (passwordInput.type === 'password') {
@@ -20,53 +22,87 @@ showOrHidePassword.addEventListener('click', function(e) {
     }
 });
 
-const isPasswordValid = (userName == '') ? true : false
+function insertErrorMessage(inputError, hrline) {
+    hrline.style.marginBottom = '5px';
+    inputError.style.color = 'red';
+    inputError.style.fontSize = '14px';
+    inputError.style.margin = '5px';
+};
 
-function errorDisplay(btn) {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        let userName = null;
-        userName = (signupForm) ? userNameInput.value.trim() : null;
-        const password = passwordInput.value;
-        const email = emailIput.value;
+async function postUserData(url, data) {
+    try {
+        const response = await fetch(url, {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(data)
+        })
 
-        function insertErrorMessage(inputError, hrline) {
-            hrline.style.marginBottom = '5px';
-            inputError.style.color = 'red';
-            inputError.style.fontSize = '14px';
-            inputError.style.margin = '5px';
-        };
-
-        if (password.length < 3) {
-            passwordError.textContent = 'Password must be at least 8 characters.';
-            insertErrorMessage(passwordError, hr);
-
-            setTimeout( function() {
-                    passwordError.textContent = '';
-            }, 2000)
-        };
-
-        if (userName == '') {
-            if (usernameError) {
-                usernameError.textContent = 'Please enter your username.';
-                insertErrorMessage(usernameError, hr);
-
-                setTimeout( function() {
-                        usernameError.textContent = '';
-                }, 2000)
-            }
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(
+                `Status ${response.status}, ${error.message}`
+            );
         }
 
-        if (email == '') {
-            if (emailError) {
-                emailError.textContent = 'Please enter your username.';
-                insertErrorMessage(emailError, hr);
+        const result = await response.json();
+        console.log("Saved:", result.message);
+    } catch(error) {
+        console.error("Signup failed:", error.message);
+    }
 
-                setTimeout( function() {
-                        emailError.textContent = '';
-                }, 2000)
-            }
-        }
-    });          
 }
 
+signupBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    const userName = userNameInput.value.trim();
+    const password = passwordInput.value;
+    const email = emailIput.value.trim();
+
+    const isUsernameValid = (userName == '') ? true : false;
+    const isEmailValid = (email == '') ? true: false;
+    const isPasswordValid = (password.length < 3) ? true : false;
+
+    if (password.length < 3) {
+        passwordError.textContent = 'Password must be at least 8 characters.';
+        insertErrorMessage(passwordError, hr);
+
+        setTimeout( () => {
+                passwordError.textContent = '';
+        }, 2500)
+    };
+
+    if (userName == '') {
+        if (usernameError) {
+            usernameError.textContent = 'Please enter your username.';
+            insertErrorMessage(usernameError, hr);
+
+            setTimeout( () => {
+                    usernameError.textContent = '';
+            }, 2500)
+        }
+    }
+
+    if (email == '') {
+        if (emailError) {
+            emailError.textContent = 'Please enter your username.';
+            insertErrorMessage(emailError, hr);
+
+            setTimeout( () => {
+                    emailError.textContent = '';
+            }, 2500)
+        }
+    }
+
+    if (isUsernameValid && isEmailValid && isPasswordValid === false) {
+        const user = {
+            username: userName,
+            email: email,
+            password: password
+        }
+
+        postUserData(serverURL, user)
+    }
+
+});          
