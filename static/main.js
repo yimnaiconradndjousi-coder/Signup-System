@@ -95,14 +95,14 @@ signupBtn.addEventListener('click', function(e) {
         }
     }
 
-    if (isUsernameValid && isEmailValid && isPasswordValid === false) {
+    // if (isUsernameValid && isEmailValid && isPasswordValid === false) {
         const user = {
             username: userName,
             email: email,
             password: password
         }
 
-        postUserData(serverURL, user)
-    }
+        postUserData(serverURL, user);
+    // }
 
 });          
