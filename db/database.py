@@ -23,7 +23,7 @@ async def check_user(conn, username: str, email: str) -> list:
             """
             SELECT username, email
             FROM users
-            WHERE username = ? AND email = ?;
+            WHERE username = ? OR email = ?;
             """, (username, email))
     except LookupError:
         print("failed to check user")
