@@ -95,7 +95,7 @@ signupBtn.addEventListener('click', function(e) {
         }
     }
 
-    // if (isUsernameValid && isEmailValid && isPasswordValid === false) {
+    if (isUsernameValid && isEmailValid && isPasswordValid === false) {
         const user = {
             username: userName,
             email: email,
@@ -103,6 +103,6 @@ signupBtn.addEventListener('click', function(e) {
         }
 
         postUserData(serverURL, user);
-    // }
+    }
 
 });          
