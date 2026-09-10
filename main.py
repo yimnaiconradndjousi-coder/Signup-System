@@ -8,7 +8,7 @@ from rich import print
 import string
 
 app = Flask(__name__)
-CORS(app, origins="http://localhost:8080")
+CORS(app, origins=["http://localhost:8080", "http://localhost:5500"])
 
 def password_hash(password: str) -> str:
     password_bytes = password.encode('utf-8')
