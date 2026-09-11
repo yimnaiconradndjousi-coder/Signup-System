@@ -1,4 +1,5 @@
 db/userDB.db
 __pycache__
-app\__pycache__
-db\__pycache__
+app/__pycache__
+db/__pycache__
+__pycache__/main.cpython-312.pyc
