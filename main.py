@@ -1,13 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import request, jsonify
+from app import app
 from flask_cors import CORS
 from pydantic import ValidationError
-from schema import SignupData
+from schema import SignupData, LoginData
 from db.database import initiate_db, check_user, register_user
 import bcrypt
 from rich import print
 import string
 
-app = Flask(__name__)
+# app.config.update(
+    
+# )
 
 CORS(app, origins=[
     "http://localhost:8080",
@@ -28,7 +31,7 @@ def verify_password(password: str, hashed_psswd: str) -> bool:
     is_password_valid = bcrypt.checkpw(password_byte, hashed_psswd_byte)
     return is_password_valid
 
-async def create_user(user):
+async def create_user(user) -> None:
     username: str = user.username.lower()
     email: str= user.email.lower()
     password: str= password_hash(user.password)
@@ -49,9 +52,8 @@ async def create_user(user):
         if conn is not None:
             await conn.close()
 
-
 @app.post('/signup')
-async def fetch_user_data():
+async def signup():
     user = request.get_json(silent=True)
     try:
         user = SignupData.model_validate(user)
@@ -66,13 +68,23 @@ async def fetch_user_data():
         return jsonify({
             "message": "Invalid username",
         }), 400
-
+    
     await create_user(user)
-
     return jsonify({"message":"User created successfully"}), 201
 
-# @app.post('/login')
-# async def login():
+
+@app.post('/login')
+async def login():
+    user = request.get_json(silent=True)
+    try:
+        user = LoginData.model_validate(user)
+    except ValidationError as error:
+        return jsonify({
+            "message": "Invalid data",
+            "errors": error.errors()
+        }), 400
+        
+    return jsonify({"message": "Login endpoint not implemented"}), 501
 
 if __name__ == "__main__":
     app.run('localhost', 8080, debug=True)

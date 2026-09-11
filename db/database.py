@@ -15,6 +15,19 @@ async def initiate_db() -> conn:
         )""")
     return conn
 
+async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
+    cur = await conn.cursor()
+    id = str(uuid.uuid1())
+    try:  
+        await cur.execute("""
+            INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
+        """, (id , username, email, psswd))
+        await conn.commit()
+        print("User Register successfully")
+    except LookupError:
+        print("Failed to register user")
+
+
 async def check_user(conn: conn, username: str, email: str):
     cur = await conn.cursor()
     try:
@@ -42,7 +55,7 @@ async def get_id(conn: conn, username, email):
         print("user not found")
     return await cur.fetchone()
 
-async def get_hashed_password(conn: conn, username, email):
+async def get_hash(conn: conn, username, email):
     cur = await conn.cursor()
     try:
         await cur.execute("""
@@ -53,18 +66,4 @@ async def get_hashed_password(conn: conn, username, email):
     except LookupError:
         print("user not found")
     return await cur.fetchone()
-
-async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
-    cur = await conn.cursor()
-    id = str(uuid.uuid1())
-    try:  
-        await cur.execute("""
-            INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
-        """, (id , username, email, psswd))
-        await conn.commit()
-        print("User Register successfully")
-    except LookupError:
-        print("Failed to register user")
-
-            
 
