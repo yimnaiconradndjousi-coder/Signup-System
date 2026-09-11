@@ -10,7 +10,7 @@ async def initiate_db() -> conn:
         id TEXT PRIMARY KEY NOT NULL,
         username TEXT NOT NULL UNIQUE,
         email TEXT NOT NULL UNIQUE,
-        password_hash  NOT NULL,
+        password_hash TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )""")
     return conn
@@ -40,6 +40,19 @@ async def get_id(conn: conn, username, email):
             """, (username, email))
     except LookupError:
         print("user not found")
+    return await cur.fetchone()
+
+async def get_hashed_password(conn: conn, username, email):
+    cur = await conn.cursor()
+    try:
+        await cur.execute("""
+            SELECT password_hash
+            FROM users
+            WHERE username = ? AND email = ?;
+            """, (username, email))
+    except LookupError:
+        print("user not found")
+    return await cur.fetchone()
 
 async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
     cur = await conn.cursor()
