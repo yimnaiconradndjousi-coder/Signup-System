@@ -1,5 +1,6 @@
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from app import app
+from app import routes
 from flask_cors import CORS
 from pydantic import ValidationError
 from schema import SignupData, LoginData
@@ -85,6 +86,12 @@ async def login():
         }), 400
         
     return jsonify({"message": "Login endpoint not implemented"}), 501
+
+@app.route('/user')
+def user():
+    name = "Yimnai conrad"
+    return render_template('index.html', name=name)
+
 
 if __name__ == "__main__":
     app.run('localhost', 8080, debug=True)
