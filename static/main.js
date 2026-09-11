@@ -8,12 +8,9 @@ const emailError = document.getElementById('email-error');
 const hr = document.querySelector('.hr');
 const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
-
-let showPasword = "password";
 const serverURL = "http://localhost:8080/signup"
 
 showOrHidePassword.addEventListener('click', function(e) {   
-    // let psswdState = (showPasword === "password") ? "text": "password";
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         showOrHidePassword.src = '../src/hide-password.png';
