@@ -30,6 +30,17 @@ async def check_user(conn: conn, username: str, email: str):
     query_result = await cur.fetchone()
     return query_result
 
+async def get_id(conn: conn, username, email):
+    cur = await conn.cursor()
+    try: 
+        await cur.execute("""
+            SELECT id
+            FROM users
+            WHERE username = ? AND email = ?;
+            """, (username, email))
+    except LookupError:
+        print("user not found")
+
 async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
     cur = await conn.cursor()
     id = str(uuid.uuid1())

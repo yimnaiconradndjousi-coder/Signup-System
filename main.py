@@ -22,7 +22,13 @@ def password_hash(password: str) -> str:
     hashed_psswd_str = hashed_psswd.decode("utf-8")
     return hashed_psswd_str
 
-async def Signup(user):
+def verify_password(password: str, hashed_psswd: str) -> bool:
+    password_byte = password.encode('utf-8')
+    hashed_psswd_byte = hashed_psswd.encode('utf-8')
+    is_password_valid = bcrypt.checkpw(password_byte, hashed_psswd_byte)
+    return is_password_valid
+
+async def create_user(user):
     username: str = user.username.lower()
     email: str= user.email.lower()
     password: str= password_hash(user.password)
@@ -61,9 +67,12 @@ async def fetch_user_data():
             "message": "Invalid username",
         }), 400
 
-    await Signup(user)
+    await create_user(user)
 
     return jsonify({"message":"User created successfully"}), 201
+
+# @app.post('/login')
+# async def login():
 
 if __name__ == "__main__":
     app.run('localhost', 8080, debug=True)
