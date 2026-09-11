@@ -34,7 +34,7 @@ hr {
 }
 
 .hr{
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 body {
@@ -46,9 +46,8 @@ body {
     background-color: #121317;
     margin: 0;
     overflow: hidden;
+    font-family: Roboto;
 }
-
-/* #Icon*/
 
 .socail-media-icons {
     width: var(--image-size);
@@ -82,7 +81,7 @@ body {
     height: 50%;
     min-width: 350px;
     min-height: 660px;
-    max-width: 425px;
+    max-width: 415px;
     max-height: 950px;
     border-radius: 10px;
     padding:0 10px 0 10px;
@@ -171,7 +170,7 @@ input:-webkit-autofill:active {
     text-align: right;
     text-decoration: none;
     color:var(--text-color);
-    margin-bottom: 25px; 
+    margin-bottom: 15px; 
 }
 
 .forgot-password-link:hover {
@@ -181,7 +180,7 @@ input:-webkit-autofill:active {
 #signup-btn, #login-btn {
     margin-top: 8%;
     text-align: center;
-    padding: 5%;
+    padding: 4%;
     cursor: pointer;
     border-radius: 30px;
     border: none;
@@ -193,7 +192,7 @@ input:-webkit-autofill:active {
 }
 
 #signup-btn, #login-btn {
-    font-size: 1em;
+    font-size: 1.2em;
     margin: 5%;
 }
 

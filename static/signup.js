@@ -8,10 +8,8 @@ const emailError = document.getElementById('email-error');
 const hr = document.querySelector('.hr');
 const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
-const serverURL = "http://localhost:8080/signup"
+const signupURL = "http://localhost:8080/signup"
 
-// Login
-const loginBtn = document.getElementById('login-btn');
 
 showOrHidePassword.addEventListener('click', function(e) {   
     if (passwordInput.type === 'password') {
@@ -105,7 +103,7 @@ signupBtn.addEventListener('click', function(e) {
             password: password
         }
 
-        postUserData(serverURL, user);
+        postUserData(signupURL, user);
     }
 
 });          

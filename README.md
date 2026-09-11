@@ -1,6 +1,6 @@
 # Signup System
 
-A small Flask signup application with a browser frontend, JSON communication, server-side validation, bcrypt password hashing, and SQLite persistence.
+A small Flask signup application with a browser frontend, JSON communication, server-side validation, bcrypt password hashing, and SQLite persistence. The frontend currently has separate JavaScript files for the signup and login pages.
 
 ![Signup screen](src/signup.png)
 
@@ -14,6 +14,8 @@ A small Flask signup application with a browser frontend, JSON communication, se
 - SQLite database access through `aiosqlite`
 - CORS configuration for local frontend development
 - Helpful HTTP responses for successful and invalid requests
+- Separate `signup.js` and `login.js` page scripts
+- Shared signup form styling used by both pages
 
 ## Project Structure
 
@@ -25,10 +27,13 @@ A small Flask signup application with a browser frontend, JSON communication, se
 ├── src/
 │   └── signup.png
 ├── static/
-│   ├── main.js
-│   └── signup.css
+│   ├── login.js
+│   ├── signup.css
+│   └── signup.js
 ├── templates/
-│   └── signup.html
+│   ├── login.html
+│   ├── signup.html
+│   └── index.html
 ├── main.py
 ├── schema.py
 └── README.md
@@ -74,12 +79,42 @@ The Flask backend runs at:
 http://localhost:8080
 ```
 
+The current Flask routes include `/`, `/index`, `/signup` (POST), `/login` (POST), and `/user`. The HTML signup and login pages do not currently have Flask GET routes, so they should be opened through the frontend server described below.
+
 ## Run the Frontend
 
-Serve the project with a local web server such as VS Code Live Server. Open the signup page from the URL provided by that server, commonly:
+Serve the project with a local web server such as VS Code Live Server. Open the pages from the URL provided by that server, commonly:
 
 ```text
 http://127.0.0.1:5500/templates/signup.html
+```
+
+The login page is commonly available at:
+
+```text
+http://127.0.0.1:5500/templates/login.html
+```
+
+The templates currently reference assets with paths such as `../static/signup.js` and `../static/signup.css`. If the assets are moved into nested folders, keep the path relative to the template location when using Live Server. For example:
+
+```text
+static/
+├── css/
+│   └── signup.css
+└── js/
+  └── signup.js
+```
+
+```html
+<link rel="stylesheet" href="../static/css/signup.css">
+<script src="../static/js/signup.js" defer></script>
+```
+
+When a template is rendered by Flask instead, use Flask's `url_for` helper:
+
+```html
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+<script src="{{ url_for('static', filename='js/signup.js') }}" defer></script>
 ```
 
 The frontend sends signup data to:
@@ -135,11 +170,13 @@ Invalid data returns HTTP status `400` with an error message.
 
 ## Current Status
 
-The signup flow is implemented. Login, sessions, cookies, logout, automated tests, and production deployment are planned next.
+The signup flow is implemented with client-side validation, a page-specific `signup.js` file, and a JSON `POST /signup` request. The login page has its own `login.js` file, but the login endpoint and login submission behavior are not implemented yet. Sessions, cookies, logout, automated tests, and production deployment are planned next.
 
 ## Future Improvements
 
-- Add login and logout endpoints
+- Implement login submission and authentication
+- Add a dedicated `login.css` file if login-specific styling is needed
+- Add Flask GET routes for the signup and login pages
 - Add secure session cookies
 - Add duplicate-user error responses such as `409 Conflict`
 - Add automated backend and frontend tests
