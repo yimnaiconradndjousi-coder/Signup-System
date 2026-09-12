@@ -10,6 +10,9 @@ const signupForm = document.querySelector('.signup-form');
 const signupBtn = document.getElementById('signup-btn');
 const serverURL = "http://localhost:8080/signup"
 
+// Login
+const loginBtn = document.getElementById('login-btn');
+
 showOrHidePassword.addEventListener('click', function(e) {   
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -51,6 +54,8 @@ async function postUserData(url, data) {
     }
 
 }
+
+
 
 signupBtn.addEventListener('click', function(e) {
     e.preventDefault();
@@ -104,3 +109,5 @@ signupBtn.addEventListener('click', function(e) {
     }
 
 });          
+
+

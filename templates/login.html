@@ -3,29 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Page</title>
+    <title>Login Page</title>
     <link rel="stylesheet" href="../static/signup.css">
     <link rel="shortcut icon" href="./favicon.svg" type="image/x-icon">
     <script src="../static/main.js" defer></script>
 
 </head>
 <body>
-    <div class="signup-form">
-        <form>
+    <div class="login-form">
+        <form action="">
             <div class="form-title">
-                <h1>Sign up</h1>
+                <h1>Login</h1>
             </div>
-            
-            <div class="input-field">
-                <label for="username">Name</label>
-                <div class="input-container">
-                    <img src="../src/user icon.png" class="input-icon" alt="user icon">
-                    <input type="text" name="username" id="username" placeholder="Type your name" autocomplete="username">
-                </div>
-                <hr class="hr">
-            </div>
-            <p id="username-error"></p>
-            
+
             <div class="input-field">
                 <label for="email">E-mail</label>
                 <div class="input-container">
@@ -34,6 +24,7 @@
                 </div>
                 <hr class="hr">
             </div>
+
             <p id="email-error"></p>
 
             <div class="input-field">
@@ -41,25 +32,29 @@
                 <div class="password-input-container">
                     <img src="../src/lock icon.png" class="input-icon" alt="lock icon">
                     <input type="password" name="password" id="password" placeholder="Type your password" autocomplete="current-password">
-                    <img src="../src/show-password.png" id="show-or-hide-password" alt="Show password">
+                    <img src="../src/show-password.png" id="show-or-hide-password" alt="eye icon">
                 </div>
+
                 <hr class="hr">
             </div>
             <p id="password-error"></p>
+            
 
-            <button id="signup-btn">Sign Up</button>
+            <a href="#" class="forgot-password-link">Forgot password?</a>
 
+            <button id="login-btn">Login</button>
+
+            <p>Or login using</p>
             <div class="sign-up">
-                <p>Or Sign Up Using</p>
-                <div class="signup-option">
+                <div class="login-option">
                     <a href="#"><img class="socail-media-icons" src="../src/facebook.webp" alt="facebook logo"></a>
                     <a href="#"><img class="socail-media-icons" src="../src/linkedin.png" alt="linkedin logo"></a>
                     <a href="#"><img class="socail-media-icons" src="../src/google.png" alt="google logo"></a>
                 </div>
             </div>
 
-            <p>Or Already have and account</p>
-            <a href="./login.html" class="login">Login</a>
+            <p>Create new account</p>
+            <a href="../templates/signup.html" class="signup">Signup</a>
 
         </form>
 

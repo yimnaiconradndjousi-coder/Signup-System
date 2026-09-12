@@ -72,7 +72,7 @@ body {
 
 /* #form */
 
-.signup-form, .login-form {
+.signup-form {
     display: flex;
     font-family: var(--text-font);
     background-color: #181A1E;
@@ -89,7 +89,7 @@ body {
     margin: auto;
 }
 
-#username-error, #password-error, #email-error {
+#username-error, #password-error,#email-error {
     margin: 0;
 }
 
@@ -127,7 +127,6 @@ input[type="text"],  input[type="password"], input[type="email"] {
     background-color: transparent;
     font-size: medium;
     width: 100%;
-    
 }
 
 input:user-valid{
@@ -147,15 +146,9 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-.input-container{
+.input-and-logo {
     display: flex;
     align-items: center;
-}
-
-.password-input-container {
-    display: grid;
-    align-items: center;
-    grid-template-columns:38px 1fr 35px;   
 }
 
 ::placeholder{
@@ -174,11 +167,7 @@ input:-webkit-autofill:active {
     margin-bottom: 25px; 
 }
 
-.forgot-password-link:hover {
-    color: var(--secondary-color);
-}
-
-#signup-btn, #login-btn {
+#signup-btn {
     margin-top: 8%;
     text-align: center;
     padding: 5%;
@@ -192,7 +181,7 @@ input:-webkit-autofill:active {
     transition: 0.2s ease;
 }
 
-#signup-btn, #login-btn {
+#signup-btn {
     font-size: 1em;
     margin: 5%;
 }
@@ -213,7 +202,7 @@ input:-webkit-autofill:active {
 
 .signup-option, .login-option {
     display: flex;
-    width: 70%;
+    width: 65%;
     align-items: center;
     justify-content: center;
     justify-content: space-between;
@@ -221,10 +210,10 @@ input:-webkit-autofill:active {
 }
 
 .login-option {
-    margin-bottom: 5%;
+    margin-bottom: 20%;
 }
 
-.login, .signup {
+.login {
     text-decoration: none;
     color:var(--text-color);
     text-align: center;
@@ -232,6 +221,6 @@ input:-webkit-autofill:active {
     transition: all 0.2s ease
 }
 
-.login:hover, .signup:hover {
+.login:hover {
     color: var(--secondary-color);
 }
