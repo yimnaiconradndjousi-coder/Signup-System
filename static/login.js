@@ -45,7 +45,6 @@ async function postUserData(url, data) {
         }
 
         console.log("Saved:", result.message);
-        // window.location.href = '/templates/index.html';
     } catch(error) {
         console.error("Signup failed:", error.message);
     }
