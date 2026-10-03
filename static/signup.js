@@ -38,7 +38,7 @@ async function postUserData(url, data) {
             );
         }
 
-        if (response.status === 201) {
+        if (response.ok) {
             const result = await response.json();
             alert('Signup successful. Please log in.');
             console.log("Saved:", result.message);

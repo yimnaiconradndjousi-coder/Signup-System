@@ -36,17 +36,16 @@ async function postUserData(url, data) {
             console.error("Invalid Email or password.")
         }
 
-        if (response.status === 202) {
-            window.location.href = 'templates/index.html';
+        if (response.ok) {
+            window.location.href = '/templates/index.html';
         }
 
         if (!response.ok) {
-            throw new Error(
-                `Status ${response.status}, ${result.message}`
-            );
+            throw new Error(`Status ${response.status}, ${result.message}`)
         }
 
         console.log("Saved:", result.message);
+        // window.location.href = '/templates/index.html';
     } catch(error) {
         console.error("Signup failed:", error.message);
     }

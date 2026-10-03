@@ -1,9 +1,14 @@
+import os
 import aiosqlite as db
 import uuid
 from aiosqlite import Connection as conn
+from pathlib import Path
+
+BASE_DIR = os.path.dirname(__file__)
+DB_PATH = os.path.join(BASE_DIR, "userDB.db")
 
 async def initiate_db() -> conn:
-    conn = await db.connect('./db/userDB.db')
+    conn = await db.connect(DB_PATH)
     await conn.execute("PRAGMA journal_mode=WAL;")
     await conn.execute("""
         CREATE TABLE IF NOT EXISTS users(
