@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, ValidationError
+from pydantic import BaseModel, EmailStr, Field
 
 class SignupData(BaseModel):
     username: str = Field(min_length=3, max_length=150)

@@ -40,30 +40,55 @@ async def check_user(conn: conn, username: str, email: str):
     except LookupError:
         print("failed to check user")
 
-    query_result = await cur.fetchone()
-    return query_result
+    row = await cur.fetchone()
+    if row is not None:
+        return row[0]
+    return None
 
-async def get_id(conn: conn, username, email):
+async def get_id(conn: conn, email: str):
     cur = await conn.cursor()
     try: 
         await cur.execute("""
             SELECT id
             FROM users
-            WHERE username = ? AND email = ?;
-            """, (username, email))
+            WHERE email = ?;
+            """, (email,))
     except LookupError:
         print("user not found")
-    return await cur.fetchone()
 
-async def get_hash(conn: conn, username, email):
+    row = await cur.fetchone()
+    if row is not None:
+        return row[0]
+    return None
+
+async def verify_id(conn:conn, id):
+    cur = await conn.cursor()
+    try: 
+        await cur.execute("""
+            SELECT id
+            FROM users
+            WHERE id = ?;
+            """, (id,))
+    except LookupError:
+        return None
+
+    row = await cur.fetchone()
+    if row is not None:
+        return row[0]
+    return None
+
+async def get_hash(conn: conn, email: str):
     cur = await conn.cursor()
     try:
         await cur.execute("""
             SELECT password_hash
             FROM users
-            WHERE username = ? AND email = ?;
-            """, (username, email))
+            WHERE email = ?;
+            """, (email,))
     except LookupError:
         print("user not found")
-    return await cur.fetchone()
+    row = await cur.fetchone()
+    if row is not None:
+        return row[0]
+    return None
 
