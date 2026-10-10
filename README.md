@@ -1,31 +1,60 @@
 # Signup System
 
-A small Flask signup application with a browser frontend, JSON communication, server-side validation, bcrypt password hashing, and SQLite persistence. The frontend currently has separate JavaScript files for the signup and login pages.
+A Flask-based signup and authentication app with a browser frontend, async SQLite persistence, and session-based login flow.
 
-![Signup screen](src/signup.png)
+## Overview
+
+This project contains a small full-stack authentication system:
+
+- user registration with validation and duplicate checks
+- password hashing before storage
+- login flow with session cookies
+- logout and current-user session checks
+- local frontend pages for signup/login
+- CORS enabled for local development
+
+The backend uses a Flask app factory and is organized under the `app/` package.
 
 ## Features
 
-- Signup form served from the frontend
-- JSON requests from JavaScript to Flask
-- Pydantic validation for username, email, and password
-- Additional backend username validation
-- Bcrypt password hashing before storage
-- SQLite database access through `aiosqlite`
-- CORS configuration for local frontend development
-- Helpful HTTP responses for successful and invalid requests
-- Separate `signup.js` and `login.js` page scripts
-- Shared signup form styling used by both pages
+- Flask app factory with blueprints for auth and registration
+- `POST /api/register` for creating accounts
+- `POST /api/auth/login` for authenticating users
+- `POST /api/auth/logout` for clearing session data
+- `POST /api/auth/me` for checking the current logged-in user
+- Pydantic request validation for signup and login payloads
+- `python_bcrypt` password hashing through the service layer
+- SQLite database access using `aiosqlite`
+- Session management using Flask cookies
+- Local frontend assets served from `static/` and templates in `templates/`
 
 ## Project Structure
 
 ```text
 .
-├── db/
-│   ├── database.py
-│   └── userDB.db
+├── .env.example
+├── .gitignore
+├── README.md
+├── requirements.txt
+├── run.py
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── schema.py
+│   ├── db/
+│   │   ├── database.py
+│   │   └── userDB.db
+│   ├── routes/
+│   │   ├── auth.py
+│   │   └── register.py
+│   └── services/
+│       ├── security.py
+│       └── users.py
 ├── src/
-│   └── signup.png
+│   ├── email2.png
+│   ├── facebook.webp
+│   ├── ...
+│   └── user icon.png
 ├── static/
 │   ├── login.js
 │   ├── signup.css
@@ -34,21 +63,20 @@ A small Flask signup application with a browser frontend, JSON communication, se
 │   ├── login.html
 │   ├── signup.html
 │   └── index.html
-├── main.py
-├── schema.py
-└── README.md
+└── .vscode/
 ```
 
 ## Requirements
 
-- Python 3.12 or later
+- Python 3.12+
 - Flask
 - Flask-CORS
 - Pydantic
-- `pydantic[email]`
-- bcrypt
+- python-dotenv
+- python_bcrypt
 - aiosqlite
-- Rich
+
+These dependencies are listed in `requirements.txt`.
 
 ## Installation
 
@@ -62,82 +90,39 @@ python -m venv .venv
 Install the dependencies:
 
 ```powershell
-pip install Flask[async] flask-cors pydantic[email] bcrypt aiosqlite rich
+pip install -r requirements.txt
 ```
 
-## Run the Backend
+Create a `.env` file based on `.env.example` and set a secret key:
 
-From the project directory:
+```env
+SECRET_KEY=your-secret-key-here
+```
+
+## Run the Application
+
+Start the Flask app:
 
 ```powershell
-python main.py
+python run.py
 ```
 
-The Flask backend runs at:
+The server runs at:
 
 ```text
 http://localhost:8080
 ```
 
-The current Flask routes include `/`, `/index`, `/signup` (POST), `/login` (POST), and `/user`. The HTML signup and login pages do not currently have Flask GET routes, so they should be opened through the frontend server described below.
+## API Endpoints
 
-## Run the Frontend
-
-Serve the project with a local web server such as VS Code Live Server. Open the pages from the URL provided by that server, commonly:
-
-```text
-http://127.0.0.1:5500/templates/signup.html
-```
-
-The login page is commonly available at:
-
-```text
-http://127.0.0.1:5500/templates/login.html
-```
-
-The templates currently reference assets with paths such as `../static/signup.js` and `../static/signup.css`. If the assets are moved into nested folders, keep the path relative to the template location when using Live Server. For example:
-
-```text
-static/
-├── css/
-│   └── signup.css
-└── js/
-  └── signup.js
-```
-
-```html
-<link rel="stylesheet" href="../static/css/signup.css">
-<script src="../static/js/signup.js" defer></script>
-```
-
-When a template is rendered by Flask instead, use Flask's `url_for` helper:
-
-```html
-<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
-<script src="{{ url_for('static', filename='js/signup.js') }}" defer></script>
-```
-
-The frontend sends signup data to:
-
-```text
-POST http://localhost:8080/signup
-```
-
-The backend currently allows these local frontend origins:
-
-- `http://localhost:5500`
-- `http://127.0.0.1:5500`
-
-The origin must match the browser URL exactly. `localhost` and `127.0.0.1` are different origins.
-
-## API Example
-
-Request:
+### Register a user
 
 ```http
-POST /signup
+POST /api/register
 Content-Type: application/json
 ```
+
+Request body:
 
 ```json
 {
@@ -147,38 +132,93 @@ Content-Type: application/json
 }
 ```
 
-Successful response:
+Responses:
+
+- `201 Created` with `{ "message": "User created successfully" }`
+- `400 Bad Request` for invalid input
+- `409 Conflict` when the username or email already exists
+- `500 Internal Server Error` for unexpected failures
+
+### Login
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+```
+
+Request body:
 
 ```json
 {
-  "message": "User created successfully"
+  "email": "user@example.com",
+  "password": "a-strong-password"
 }
 ```
 
-The response uses HTTP status `201 Created`.
+Responses:
 
-Invalid data returns HTTP status `400` with an error message.
+- `202 Accepted` with `{ "message": "Login successful" }`
+- `400 Bad Request` for invalid credentials or malformed input
+
+### Logout
+
+```http
+POST /api/auth/logout
+```
+
+Response:
+
+- `200 OK` with `{ "message": "Logged out" }`
+
+### Get current user session
+
+```http
+POST /api/auth/me
+```
+
+If the user is logged in, the response contains the session user ID:
+
+```json
+{
+  "id": "<session_id>"
+}
+```
+
+When no valid session exists, the API returns:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+## Frontend Usage
+
+The project includes static HTML pages for signup and login under `templates/`.
+
+Common local frontend URLs when served through a local web server such as VS Code Live Server:
+
+```text
+http://127.0.0.1:5500/templates/signup.html
+http://127.0.0.1:5500/templates/login.html
+```
+
+The frontend JavaScript files in `static/` send requests to the Flask backend on `http://localhost:8080`.
 
 ## Security Notes
 
 - Passwords are hashed with bcrypt before being stored.
-- Passwords should never be returned to the frontend or written to logs.
-- Backend validation is the security boundary; frontend validation only improves user experience.
-- The Flask development server is intended for local development, not production.
-- Before deployment, use a production server, HTTPS, secure secret management, rate limiting, and stronger database error handling.
-- The SQLite database file is local development data and should not be committed to GitHub.
+- Session keys are kept in Flask server-side session storage.
+- Backend validation is the primary security layer; browser validation is only a UX improvement.
+- The project is intended for local development. For production, use HTTPS, a production WSGI server, and proper secret management.
 
-## Current Status
+## Current State
 
-The signup flow is implemented with client-side validation, a page-specific `signup.js` file, and a JSON `POST /signup` request. The login page has its own `login.js` file, but the login endpoint and login submission behavior are not implemented yet. Sessions, cookies, logout, automated tests, and production deployment are planned next.
+The project is currently implementing a working registration and authentication flow using Flask blueprints and session cookies. The backend routes are active and the frontend pages are wired to the API endpoints.
 
-## Future Improvements
+## Development Notes
 
-- Implement login submission and authentication
-- Add a dedicated `login.css` file if login-specific styling is needed
-- Add Flask GET routes for the signup and login pages
-- Add secure session cookies
-- Add duplicate-user error responses such as `409 Conflict`
-- Add automated backend and frontend tests
-- Improve user-facing success and error messages
-- Move documentation images to `docs/images/` if the project grows
+- The app is created with `create_app()` in `app/__init__.py`.
+- The server is launched from `run.py`.
+- The database is stored at `app/db/userDB.db`.
+- CORS is configured for local origins, including `http://localhost:5500` and `http://127.0.0.1:5500`.

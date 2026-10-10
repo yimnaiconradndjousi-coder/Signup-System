@@ -2,8 +2,11 @@ import os
 import aiosqlite as db
 import uuid
 from aiosqlite import Connection as conn
-from pathlib import Path
+import secrets
 
+url_encode = secrets.token_urlsafe(2)
+print(url_encode)
+ 
 BASE_DIR = os.path.dirname(__file__)
 DB_PATH = os.path.join(BASE_DIR, "userDB.db")
 

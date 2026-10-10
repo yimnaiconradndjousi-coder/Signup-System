@@ -57,12 +57,12 @@ async def current_user():
 
     conn = await initiate_db()
     try:
-        id = verify_id(conn, session_id)
+        id = await verify_id(conn, session_id)
     finally:
         await conn.close()
 
-    if id is None:
-        session.clear()
+    if id:
+        # session.clear()
         return jsonify({"id": session_id})
     
     return jsonify({"message": "Authentication required"}),  401
