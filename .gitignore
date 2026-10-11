@@ -2,3 +2,4 @@
 **/*.py[cod]
 **/userDB.db
 .env
+.vscode
