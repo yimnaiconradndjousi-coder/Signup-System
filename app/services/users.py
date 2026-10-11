@@ -8,12 +8,12 @@ async def create_user(user):
     conn = None
     try:     
         conn = await initiate_db()
-        users = await check_user(conn, username, email)
-        if users is None:
-            await register_user(conn, username, email, password)
-            return "created"
-        else:
+        user = await register_user(conn, username, email, password)
+
+        if user == "already_exist":
             return "already_exist"
+        else:
+            return "created"
 
     except ValueError:
         return "user registry Failed"

@@ -4,7 +4,7 @@ from app.schema import SignupData
 import string
 from app.services.users import create_user
 
-register = Blueprint("register0", __name__, url_prefix="/api")
+register = Blueprint("register", __name__, url_prefix="/api")
 
 @register.post("/register")
 async def signup():

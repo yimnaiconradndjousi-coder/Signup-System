@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from app.schema import LoginData
 from app.services.security import verify_password
 
-auth = Blueprint("auth0", __name__, url_prefix="/api/auth")
+auth = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 @auth.post("/login")
 async def login():
@@ -13,7 +13,7 @@ async def login():
         user = LoginData.model_validate(user)
     except ValidationError as error:
         return jsonify({
-            "message": "Invalid input",
+            "message": "Invalid Email or Password",
             "errors": error.errors()
         }), 400
 
@@ -24,7 +24,7 @@ async def login():
     try:
         stored_psswd_hash = await get_hash(conn, email)
         if stored_psswd_hash is None:
-            return jsonify({"message": "No account exists for this username or email"}), 400
+            return jsonify({"message": "Invalid Email or Password"}), 400
 
         is_hash_valid = verify_password(password, stored_psswd_hash) 
 
@@ -37,7 +37,7 @@ async def login():
             return jsonify({"message": "Invalid Email or Password"}), 400
         
     except ValueError:
-        return jsonify({'message': "Something went wrong, Invalid Email or Password"}), 400
+        return jsonify({'message': "Invalid Email or Password"}), 400
     
     finally:
         await conn.close()
@@ -62,7 +62,6 @@ async def current_user():
         await conn.close()
 
     if id:
-        # session.clear()
         return jsonify({"id": session_id})
     
     return jsonify({"message": "Authentication required"}),  401

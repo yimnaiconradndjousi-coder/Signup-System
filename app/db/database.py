@@ -4,7 +4,7 @@ import uuid
 from aiosqlite import Connection as conn
 import secrets
 
-url_encode = secrets.token_urlsafe(2)
+url_encode = secrets.token_urlsafe(7)
 print(url_encode)
  
 BASE_DIR = os.path.dirname(__file__)
@@ -23,7 +23,7 @@ async def initiate_db() -> conn:
         )""")
     return conn
 
-async def register_user(conn: conn, username: str, email: str,psswd: str) -> None:
+async def register_user(conn: conn, username: str, email: str,psswd: str) -> str:
     cur = await conn.cursor()
     id = str(uuid.uuid1())
     try:  
@@ -31,9 +31,9 @@ async def register_user(conn: conn, username: str, email: str,psswd: str) -> Non
             INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?);
         """, (id , username, email, psswd))
         await conn.commit()
-        print("User Register successfully")
+        return "created"
     except LookupError:
-        print("Failed to register user")
+        return "already_exist"
 
 
 async def check_user(conn: conn, username: str, email: str):
