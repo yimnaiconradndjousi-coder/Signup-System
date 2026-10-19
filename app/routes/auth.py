@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from app.db.database import initiate_db, get_hash, get_id, verify_id
+from app.db.database import connect_db, get_hash, get_id, verify_id
 from pydantic import ValidationError
 from app.schema import LoginData
 from app.services.security import verify_password
@@ -17,7 +17,7 @@ async def login():
             "errors": error.errors()
         }), 400
 
-    conn = await initiate_db()
+    conn = await connect_db()
     email = user.email.lower()
     password = user.password
     user_id = await get_id(conn, email)
@@ -55,7 +55,7 @@ async def current_user():
     if session_id is None:
         return jsonify({"message": "Authentication required"}), 401
 
-    conn = await initiate_db()
+    conn = await connect_db()
     try:
         id = await verify_id(conn, session_id)
     finally:

@@ -1,4 +1,4 @@
-from app.db.database import initiate_db, check_user, register_user
+from app.db.database import connect_db, check_user, register_user
 from app.services.security import hash_password
 
 async def create_user(user):
@@ -7,7 +7,7 @@ async def create_user(user):
     password: str= hash_password(user.password)
     conn = None
     try:     
-        conn = await initiate_db()
+        conn = await connect_db()
         user = await register_user(conn, username, email, password)
 
         if user == "already_exist":

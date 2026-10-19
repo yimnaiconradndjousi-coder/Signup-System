@@ -2,4 +2,5 @@
 **/*.py[cod]
 **/userDB.db
 .env
-.vscode
+/.vscode
+/.vscode/setting.json
