@@ -3,20 +3,21 @@ class UserQueries:
     
     CREATE_TABLE = """
             CREATE TABLE IF NOT EXISTS users(
-            id TEXT PRIMARY KEY NOT NULL,
-            username TEXT NOT NULL UNIQUE,
-            email TEXT NOT NULL UNIQUE,
-            password_hash TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+                id TEXT PRIMARY KEY NOT NULL,
+                username TEXT NOT NULL UNIQUE,
+                email TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
         """
+        # CREATE INDEX email_password_hash ON sessions(email);
 
     REGISTER_USER = """
                 INSERT INTO users(
-                id, 
-                username, 
-                email, 
-                password_hash) 
-                VALUES (?, ?, ?, ?);
+                    id, 
+                    username, 
+                    email, 
+                    password_hash) 
+                    VALUES (?, ?, ?, ?);
             """
 
     GET_ID = """

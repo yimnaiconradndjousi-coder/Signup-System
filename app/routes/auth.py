@@ -48,7 +48,6 @@ def logout():
     session.clear()
     return jsonify({"message": "Logged out"}), 200
 
-
 @auth.post("/me")
 async def current_user():
     session_id = session.get('session_id')
