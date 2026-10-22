@@ -7,7 +7,7 @@ from app.services.users import create_user
 register = Blueprint("register", __name__, url_prefix="/api")
 
 @register.post("/register")
-async def signup():
+def signup():
     user = request.get_json(silent=True)
     try:
         user = SignupData.model_validate(user)
@@ -32,7 +32,7 @@ async def signup():
             }
         }), 400
     
-    result = await create_user(user)
+    result = create_user(user)
 
     if result == "already_exist":
         return jsonify({"message": "An account with this username or email already exist"}), 409
